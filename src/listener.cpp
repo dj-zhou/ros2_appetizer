@@ -5,7 +5,7 @@ using namespace std::placeholders;
 
 Listener::Listener() : Node("listener") {
     subscription_ = this->create_subscription<std_msgs::msg::String>(
-        "/chatter", 10, std::bind(&Listener::topicCallback, this, _1));
+        "chatter", 10, std::bind(&Listener::topicCallback, this, _1));
 }
 
 void Listener::topicCallback(const std_msgs::msg::String::SharedPtr msg) const {
