@@ -22,6 +22,7 @@ find_package(std_msgs REQUIRED)
 
 include_directories(./include/)
 
+# --------------------------------
 add_executable(
   talker
   "src/talker.cpp"
@@ -35,6 +36,23 @@ ament_target_dependencies(
 )
 
 install(TARGETS talker
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# --------------------------------
+add_executable(
+  listener
+  "src/listener.cpp"
+  "src/listener_node.cpp"
+)
+
+ament_target_dependencies(
+  listener
+  rclcpp
+  std_msgs
+)
+
+install(TARGETS listener
   DESTINATION lib/${PROJECT_NAME}
 )
 
