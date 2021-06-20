@@ -52,6 +52,7 @@ ament_target_dependencies(
   listener
   rclcpp
   std_msgs
+  std_srvs
 )
 
 install(TARGETS listener
