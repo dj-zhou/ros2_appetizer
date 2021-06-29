@@ -22,4 +22,5 @@ private:
     Service<std_srvs::srv::Empty>::SharedPtr service_;
     size_t count_;
     bool talk_style_;
+    int count_start_;
 };

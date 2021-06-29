@@ -4,6 +4,7 @@ using namespace std::chrono_literals;
 using namespace std::placeholders;
 
 Talker::Talker() : Node("talker"), count_(0), talk_style_(true) {
+    this->declare_parameter<int>("count_start", 0);
     publisher_ = this->create_publisher<std_msgs::msg::String>("/chatter", 10);
     timer_ =
         this->create_wall_timer(1s, std::bind(&Talker::timerCallback, this));
@@ -13,11 +14,14 @@ Talker::Talker() : Node("talker"), count_(0), talk_style_(true) {
 
 void Talker::timerCallback() {
     auto message = std_msgs::msg::String();
+    this->get_parameter("count_start", count_start_);
     if (talk_style_) {
-        message.data = "Hello, ROS2 and AGV! " + std::to_string(count_++);
+        message.data =
+            "Hello, ROS2 and AGV! " + std::to_string(count_start_ + count_++);
     }
     else {
-        message.data = std::to_string(count_++) + ": It's a good day today!";
+        message.data = std::to_string(count_start_ + count_++)
+                       + ": It's a good day today!";
     }
     RCLCPP_INFO(this->get_logger(), "Publishing: '%s'", message.data.c_str());
     publisher_->publish(message);
