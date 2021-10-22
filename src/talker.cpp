@@ -12,7 +12,7 @@ Talker::Talker() : Node("talker"), count_(0), talk_style_(true) {
     service_ = this->create_service<std_srvs::srv::Empty>(
         "/toggle", std::bind(&Talker::serviceCallback, this, _1, _2));
     service_add_ = this->create_service<agv_interfaces::srv::AddThreeInts>(
-        "add_three_ints", std::bind(&Talker::serviceCallback, this, _1, _2));
+        "add_three_ints", std::bind(&Talker::serviceAddCallback, this, _1, _2));
 }
 
 void Talker::timerCallback() {
