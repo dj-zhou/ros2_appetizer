@@ -13,7 +13,7 @@ Listener::Listener() : Node("listener") {
         10s, std::bind(&Listener::timerAddCallback, this));
     client_ = this->create_client<std_srvs::srv::Empty>("toggle");
     client_add_ = this->create_client<agv_interfaces::srv::AddThreeInts>(
-        "add_three_ints");
+        "/add_three_ints");
 }
 
 void Listener::topicCallback(const std_msgs::msg::String::SharedPtr msg) const {
