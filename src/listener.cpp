@@ -10,7 +10,7 @@ Listener::Listener() : Node("listener") {
     timer_ =
         this->create_wall_timer(5s, std::bind(&Listener::timerCallback, this));
     timer_add_ = this->create_wall_timer(
-        5s, std::bind(&Listener::timerAddCallback, this));
+        10s, std::bind(&Listener::timerAddCallback, this));
     client_     = this->create_client<std_srvs::srv::Empty>("toggle");
     client_add_ = this->create_client<agv_interfaces::srv::AddThreeInts>(
         "add_three_ints");
@@ -38,5 +38,6 @@ void Listener::timerAddCallback() {
     request->b  = 2;
     request->c  = 3;
     auto result = client_add_->async_send_request(request);
+    // FIXME: seems block the node
     RCLCPP_INFO(this->get_logger(), "Sum: %ld", result.get()->sum);
 }
