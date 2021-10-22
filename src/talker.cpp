@@ -10,6 +10,9 @@ Talker::Talker() : Node("talker"), count_(0), talk_style_(true) {
         this->create_wall_timer(1s, std::bind(&Talker::timerCallback, this));
     service_ = this->create_service<std_srvs::srv::Empty>(
         "/toggle", std::bind(&Talker::serviceCallback, this, _1, _2));
+
+    service_add_ = this->create_service<ros2_appetizer::srv::AddThreeInts>(
+        "add_three_ints", &serviceAddCallback);
 }
 
 void Talker::timerCallback() {
@@ -33,4 +36,10 @@ void Talker::serviceCallback(
     ( void )request;
     ( void )response;
     talk_style_ = !talk_style_;
+}
+
+void Talker::serviceAddCallback(
+    const std::shared_ptr<ros2_appetizer::srv::AddThreeInts::Request> request,
+    std::shared_ptr<ros2_appetizer::srv::AddThreeInts::Response> response) {
+    response->sum = request->a + request->b + request->c;
 }

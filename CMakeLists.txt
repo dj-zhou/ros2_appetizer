@@ -20,8 +20,14 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(ros2_appetizer REQUIRED)
 
 include_directories(./include/)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  "srv/AddThreeInts.srv"
+ )
 
 # --------------------------------
 add_executable(

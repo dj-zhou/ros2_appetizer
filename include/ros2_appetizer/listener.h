@@ -13,9 +13,12 @@ public:
 
 private:
     void topicCallback(const std_msgs::msg::String::SharedPtr msg) const;
+    void timerAddCallback();
     void timerCallback();
 
     TimerBase::SharedPtr timer_;
+    TimerBase::SharedPtr timer_add_;
     Subscription<std_msgs::msg::String>::SharedPtr subscription_;
     Client<std_srvs::srv::Empty>::SharedPtr client_;
+    Client<ros2_appetizer::srv::AddThreeInts>::SharedPtr client_add_;
 };
