@@ -1,4 +1,5 @@
 #include "ros2_appetizer/talker.h"
+#include "agv_interfaces/srv/add_three_ints.hpp"
 
 using namespace std::chrono_literals;
 using namespace std::placeholders;
@@ -10,9 +11,8 @@ Talker::Talker() : Node("talker"), count_(0), talk_style_(true) {
         this->create_wall_timer(1s, std::bind(&Talker::timerCallback, this));
     service_ = this->create_service<std_srvs::srv::Empty>(
         "/toggle", std::bind(&Talker::serviceCallback, this, _1, _2));
-
-    service_add_ = this->create_service<ros2_appetizer::srv::AddThreeInts>(
-        "add_three_ints", &serviceAddCallback);
+    service_add_ = this->create_service<agv_interfaces::srv::AddThreeInts>(
+        "add_three_ints", std::bind(&Talker::serviceCallback, this, _1, _2));
 }
 
 void Talker::timerCallback() {
@@ -39,7 +39,7 @@ void Talker::serviceCallback(
 }
 
 void Talker::serviceAddCallback(
-    const std::shared_ptr<ros2_appetizer::srv::AddThreeInts::Request> request,
-    std::shared_ptr<ros2_appetizer::srv::AddThreeInts::Response> response) {
+    const std::shared_ptr<agv_interfaces::srv::AddThreeInts::Request> request,
+    std::shared_ptr<agv_interfaces::srv::AddThreeInts::Response> response) {
     response->sum = request->a + request->b + request->c;
 }

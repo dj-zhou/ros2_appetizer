@@ -1,4 +1,5 @@
 #include "ros2_appetizer/listener.h"
+#include "agv_interfaces/srv/add_three_ints.hpp"
 
 using namespace std::chrono_literals;
 using namespace std::placeholders;
@@ -11,7 +12,7 @@ Listener::Listener() : Node("listener") {
     timer_add_ = this->create_wall_timer(
         5s, std::bind(&Listener::timerAddCallback, this));
     client_     = this->create_client<std_srvs::srv::Empty>("toggle");
-    client_add_ = this->create_client<ros2_appetizer::srv::AddThreeInts>(
+    client_add_ = this->create_client<agv_interfaces::srv::AddThreeInts>(
         "add_three_ints");
 }
 
@@ -30,11 +31,12 @@ void Listener::timerCallback() {
 
 void Listener::timerAddCallback() {
     auto request =
-        std::make_shared<ros2_appetizer::srv::AddThreeInts::Request>();
-    RCLCPP_INFO(this->get_logger(), "Calls a <srv::AddThreeInts> service.");
+        std::make_shared<agv_interfaces::srv::AddThreeInts::Request>();
+    RCLCPP_INFO(this->get_logger(),
+                "Calls a <agv_interfaces::srv::AddThreeInts> service.");
     request->a  = 1;
     request->b  = 2;
     request->c  = 3;
     auto result = client_add_->async_send_request(request);
-    RCLCPP_INFO(rclcpp::get_logger(), "Sum: %ld", result.get()->sum);
+    RCLCPP_INFO(this->get_logger(), "Sum: %ld", result.get()->sum);
 }

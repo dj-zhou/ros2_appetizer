@@ -1,5 +1,6 @@
 #pragma once
 
+#include "agv_interfaces/srv/add_three_ints.hpp"
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
 #include "std_srvs/srv/empty.hpp"
@@ -20,5 +21,5 @@ private:
     TimerBase::SharedPtr timer_add_;
     Subscription<std_msgs::msg::String>::SharedPtr subscription_;
     Client<std_srvs::srv::Empty>::SharedPtr client_;
-    Client<ros2_appetizer::srv::AddThreeInts>::SharedPtr client_add_;
+    Client<agv_interfaces::srv::AddThreeInts>::SharedPtr client_add_;
 };
