@@ -31,32 +31,32 @@ void Listener::timerCallback() {
 }
 
 void Listener::timerAddCallback() {
-    auto request =
-        std::make_shared<agv_interfaces::srv::AddThreeInts::Request>();
-    RCLCPP_INFO(this->get_logger(),
-                "Calls a <agv_interfaces::srv::AddThreeInts> service.");
-    request->a = 1;
-    request->b = 2;
-    request->c = 3;
-    while (!client_add_->wait_for_service(1s)) {
+    if (!client_->wait_for_service(1s)) {
         if (!rclcpp::ok()) {
-            RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),
+            RCLCPP_ERROR(this->get_logger(),
                          "Interrupted while waiting for the service. Exiting.");
             return;
         }
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"),
-                    "service not available, waiting again...");
+        RCLCPP_INFO(this->get_logger(), "Service not available after waiting");
+        return;
     }
 
-    auto result = client_add_->async_send_request(request);
-    if (rclcpp::spin_until_future_complete(this->get_node_base_interface(),
-                                           result)
-        == rclcpp::FutureReturnCode::SUCCESS) {
-        RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Sum: %ld",
-                    result.get()->sum);
-    }
-    else {
-        RCLCPP_ERROR(rclcpp::get_logger("rclcpp"),
-                     "Failed to call service add_two_ints");
-    }
+    RCLCPP_INFO(this->get_logger(),
+                "Calls a <agv_interfaces::srv::AddThreeInts> service.");
+
+    auto request =
+        std::make_shared<agv_interfaces::srv::AddThreeInts::Request>();
+    request->a = 10;
+    request->b = 20;
+    request->c = 30;
+
+    using ServiceResponseFuture =
+        rclcpp::Client<agv_interfaces::srv::AddThreeInts>::SharedFuture;
+
+    auto response_received_callback = [this](ServiceResponseFuture future) {
+        RCLCPP_INFO(this->get_logger(), "Got result: [ %ld]",
+                    future.get()->sum);
+    };
+    auto future_result =
+        client_add_->async_send_request(request, response_received_callback);
 }
