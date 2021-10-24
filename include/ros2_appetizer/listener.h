@@ -14,8 +14,8 @@ public:
 
 private:
     void topicCallback(const std_msgs::msg::String::SharedPtr msg) const;
-    void timerAddCallback();
     void timerCallback();
+    void timerAddCallback();
 
     TimerBase::SharedPtr timer_;
     TimerBase::SharedPtr timer_add_;

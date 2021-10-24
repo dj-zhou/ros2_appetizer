@@ -12,8 +12,7 @@ Talker::Talker() : Node("talker"), count_(0), talk_style_(true) {
     service_ = this->create_service<std_srvs::srv::Empty>(
         "/toggle", std::bind(&Talker::serviceCallback, this, _1, _2));
     service_add_ = this->create_service<agv_interfaces::srv::AddThreeInts>(
-        "/add_three_ints",
-        std::bind(&Talker::serviceAddCallback, this, _1, _2));
+        "add_three_ints", std::bind(&Talker::serviceAddCallback, this, _1, _2));
 }
 
 void Talker::timerCallback() {
@@ -40,10 +39,9 @@ void Talker::serviceCallback(
 }
 
 void Talker::serviceAddCallback(
-    // FIXME: cannot receive a request
-    RCLCPP_INFO(this->get_logger(), "serviceAddCallback: receive a request");
     const std::shared_ptr<agv_interfaces::srv::AddThreeInts::Request> request,
     std::shared_ptr<agv_interfaces::srv::AddThreeInts::Response> response) {
+    RCLCPP_INFO(this->get_logger(), "serviceAddCallback: receive a request");
     response->sum = request->a + request->b + request->c;
     RCLCPP_INFO(this->get_logger(), "serviceAddCallback: response");
 }

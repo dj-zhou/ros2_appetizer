@@ -13,7 +13,7 @@ Listener::Listener() : Node("listener") {
         10s, std::bind(&Listener::timerAddCallback, this));
     client_ = this->create_client<std_srvs::srv::Empty>("toggle");
     client_add_ = this->create_client<agv_interfaces::srv::AddThreeInts>(
-        "/add_three_ints");
+        "add_three_ints");
 }
 
 void Listener::topicCallback(const std_msgs::msg::String::SharedPtr msg) const {
@@ -25,7 +25,7 @@ void Listener::timerCallback() {
     auto request = std::make_shared<std_srvs::srv::Empty::Request>();
     RCLCPP_INFO(this->get_logger(), "Calls a <std_srvs::srv::Empty> service.");
     auto result = client_->async_send_request(request);
-    RCLCPP_INFO(this->get_logger(), "got a response?");
+    RCLCPP_INFO(this->get_logger(), "Gets a <std_srvs::srv::Empty> response.");
     ( void )result;
 }
 
@@ -38,6 +38,9 @@ void Listener::timerAddCallback() {
     request->b = 2;
     request->c = 3;
     auto result = client_add_->async_send_request(request);
-    // FIXME: seems block the node
+    // FIXME: seems cannot get a response
+    RCLCPP_INFO(this->get_logger(),
+                "Gets a <agv_interfaces::srv::AddThreeInts> response.");
+    // get stuck here
     RCLCPP_INFO(this->get_logger(), "Sum: %ld", result.get()->sum);
 }
