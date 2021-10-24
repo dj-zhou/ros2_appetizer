@@ -31,7 +31,7 @@ void Listener::timerCallback() {
 }
 
 void Listener::timerAddCallback() {
-    if (!client_->wait_for_service(1s)) {
+    if (!client_add_->wait_for_service(1s)) {
         if (!rclcpp::ok()) {
             RCLCPP_ERROR(this->get_logger(),
                          "Interrupted while waiting for the service. Exiting.");
