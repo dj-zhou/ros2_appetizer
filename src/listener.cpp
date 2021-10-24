@@ -37,10 +37,10 @@ void Listener::timerAddCallback() {
     request->a = 1;
     request->b = 2;
     request->c = 3;
-    auto result = client_add_->async_send_request(request);
-    // FIXME: seems cannot get a response
+    auto response = client_add_->async_send_request(request);
     RCLCPP_INFO(this->get_logger(),
                 "Gets a <agv_interfaces::srv::AddThreeInts> response.");
     // get stuck here
-    RCLCPP_INFO(this->get_logger(), "Sum: %ld", result.get()->sum);
+    auto result = response.get();
+    // RCLCPP_INFO(this->get_logger(), "Sum: %ld", result.get()->sum);
 }
